@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"flag"
 
 	"github.com/ilyakaznacheev/cleanenv"
 )
@@ -21,21 +22,48 @@ type GRPCConfig struct {
 }
 
 func MustLoad() *Config {
-	configPath := os.Getenv("CONFIG_PATH")
-	if configPath == "" {
-		log.Fatal("CONFIG_PATH is not set")
+	path := fetchConfigPath()
+	if path == "" {
+		panic("config path is empty")
 	}
-
-	// check if file exists
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatalf("config file does not exist: %s", configPath)
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		panic("config path is not exist: " + path)
 	}
-
 	var cfg Config
 
-	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
-		log.Fatalf("cannot read config: %s", err)
+	if err := cleanenv.ReadConfig(path, &cfg); err != nil {
+		log.Fatalf("cannot read config: %s", err.Error())
 	}
 
 	return &cfg
+
+	// configPath := os.Getenv("CONFIG_PATH")
+	// if configPath == "" {
+	// 	log.Fatal("CONFIG_PATH is not set")
+	// }
+
+	// // check if file exists
+	// if _, err := os.Stat(configPath); os.IsNotExist(err) {
+	// 	log.Fatalf("config file does not exist: %s", configPath)
+	// }
+
+	// var cfg Config
+
+	// if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+	// 	log.Fatalf("cannot read config: %s", err)
+	// }
+
+	// return &cfg
+}
+
+func fetchConfigPath() string {
+	var res string
+
+	flag.StringVar(&res, "config", "", "path to config file")
+	flag.Parse()
+
+	if res == "" {
+		res = os.Getenv("CONFIG_PATH")	
+	}
+	return res
 }
