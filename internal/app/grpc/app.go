@@ -40,7 +40,7 @@ func (a *App) Run() error {
 	const op = "grpcapp.Run"
 	log := a.log.With(
 		slog.String("op", op),
-		slog.String("port", a.port),
+		slog.Int("port", a.port),
 	)
 
 	l, err := net.Listen("tcp", fmt.Sprintf(":%d", a.port))
