@@ -3,7 +3,7 @@ module sso
 go 1.24.0
 
 require (
-	github.com/Underwoodoff/protos v0.0.1
+	github.com/Underwoodoff/protos v0.0.2
 	github.com/fatih/color v1.18.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	google.golang.org/grpc v1.70.0

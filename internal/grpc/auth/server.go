@@ -8,11 +8,11 @@ import (
 )
 
 type serverAPI struct {
-	ssov1.UnimplementedAythServer
+	ssov1.UnimplementedAuthServer
 }
 
 func Register(gRPC *grpc.Server) {
-	ssov1.RegisterAythServer(gRPC, &serverAPI{})
+	ssov1.RegisterAuthServer(gRPC, &serverAPI{})
 }
 
 func (s *serverAPI) Login(
